@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('user_key')->nullable()->after('id');
-            $table->string('meta')->nullable()->after('password');
+        Schema::create('tasks', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('code');
+            $table->string('command');
+            $table->longText('details');
+            $table->enum('status',['pending','completed','cancelled']);
+            $table->timestamps();
         });
     }
 
@@ -26,8 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['user_key', 'meta']);
-        });
+        Schema::dropIfExists('tasks');
     }
 };

@@ -184,12 +184,9 @@ return [
         'model' => Wallet::class,
         'creating' => [],
         'default' => [
-            'name' => 'System Naira Wallet',
-            'slug' => 'system',
+            'name' => 'System Naira',
+            'slug' => 'ngn',
             'meta' => [
-                'type' => 'personal',
-                'user' => 'general',
-                'decimal_places' => '2',
             ],
         ],
     ],

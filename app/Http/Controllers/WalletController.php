@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Api;
+use App\Helpers\General;
+use App\Models\Currency;
+use App\Models\WalletType;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,19 +17,26 @@ class WalletController extends Controller
 {
    public function index()
    {
-        $wallets = Auth::user()->wallets->where('slug','!=','system');
-        return view('user.wallet.index',compact('wallets'));
+        //$availableWallets = Currency::all();
+        $availableWallets = WalletType::crypto()->get();
+        $wallets = Auth::user()->wallets->where('slug','!=','ngn');
+        return view('user.wallet.index',compact('wallets','availableWallets'));
    }
 
     public function create(Request $request)
     {
         $request->validate([
-            'currency' => ['required', 'string', 'max:255'],
+            'wallet_type' => ['required', 'integer'],
         ]);
 
         $user = Auth::user();
-        //return ;
-        if($user->hasWallet($request->currency))
+        $availableCrypto = WalletType::availablecrypto($request->wallet_type)->first();
+        if(!$availableCrypto)
+        {
+            Alert::alert('Warning!', 'Invalid wallet', 'warning');
+            return redirect()->back();
+        }
+        if($user->hasWallet($availableCrypto->code))
        {
             Alert::alert('Warning!', 'You Cane Create Same Type Of Account At Once', 'warning');
             return redirect()->back();
@@ -33,7 +44,7 @@ class WalletController extends Controller
 
 
 
-        $response = Http::withToken('xmHirkfXxMLgWOx8YnIXvBqO91c7UL9ju88NFDWK')->post('https://www.quidax.com/api/v1/users/'.$user->user_key.'/wallets/'.$request->currency.'/addresses');
+        $response = Http::withToken(Api::quidax_api_key())->post(Api::quidax_base_url().'users/'.$user->user_key.'/wallets/'.$availableCrypto->code.'/addresses');
         Log::debug(json_encode($response->object()));
         if($response->successful())
         {
@@ -41,18 +52,16 @@ class WalletController extends Controller
             if(isset($result->status) && $result->status == 'success')
             {
                 $wallet = $user->createWallet([
-                    'name' => Str::upper($request->currency),
-                    'slug' => $request->currency,
-                    'decimal_places' => 8,
+                    'name' => $availableCrypto->display_name,
+                    'slug' => $availableCrypto->code,
+                    'description' => 'Crypto Currency Wallet',
                     'meta' => [
-                        'type' => 'crypto',
-                        'user' => 'general',
-                        'decimal_places' => 8,
-                        'ac_keys' => [
-                            'id' => $result->data->id,
-                            'address' => null,
-                        ]
-                    ],
+                        'id' => $result->data->id,
+                        'address' => null,
+                        'type' => 'local',
+                        'decimal_places' => $availableCrypto->allow_decimal,
+                        'wallet_type' => $availableCrypto,
+                    ]
                 ]);
                 Alert::alert('Success!', 'Wallet Create Successfully.Please Wait A Little Bit If Address Is Not Generate', 'success');
                 return redirect()->back();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User;
+use App\Models\WalletType;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -13,7 +14,8 @@ class LinkageController extends Controller
 {
     public function index()
     {
-       return view('user.linkage.ok2pay');
+        //return WalletType::primary()->first();
+        return view('user.linkage.ok2pay');
     }
 
     public function ok2pay_view()

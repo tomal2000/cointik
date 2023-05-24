@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('user_key')->nullable()->after('id');
-            $table->string('meta')->nullable()->after('password');
+        Schema::create('fees', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('wallet_type_id');
+            $table->decimal('amount',12,8)->default(0);
+            $table->enum('type',['flat','percentage','others'])->default('flat');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['user_key', 'meta']);
-        });
+        Schema::dropIfExists('fees');
     }
 };

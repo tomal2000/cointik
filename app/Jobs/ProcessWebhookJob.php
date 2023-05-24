@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\User;
+use Bavix\Wallet\Models\Transaction;
 use Illuminate\Bus\Queueable;
 use Bavix\Wallet\Models\Wallet;
 use Illuminate\Support\Facades\Log;
@@ -43,16 +45,62 @@ class ProcessWebhookJob extends JobsProcessWebhookJob implements ShouldQueue
 
         if(isset($data['event']) && $data['event'] == 'wallet.address.generated')
         {
-           $wallet = Wallet::where('meta->ac_keys->id',$data['data']['id'])->first();
+           $wallet = Wallet::where('meta->id',$data['data']['id'])->first();
            Log::debug($wallet);
            $collection = collect($wallet->meta);
            $merged = $collection->merge([
-            'ac_keys' => [
-                'id' => $collection['ac_keys']['id'],
+                'id' => $collection['id'],
                 'address' => $data['data']['address']
-            ]
              ]);
            $wallet->update(['meta' =>$merged->all()]);
+        }
+
+        if(isset($data['event']) && $data['event'] == 'deposit.transaction.confirmation')
+        {
+            $user = User::where('user_key',$data['data']['user']['id'])->first();
+
+            if(!$user->hasWallet($data['data']['wallet']['currency']))
+            {
+                return response('Failed Invalid Wallet',404);
+            }
+
+            $wallet = $user->getWallet($data['data']['wallet']['currency']);
+            if($data['data']['payment_transaction']['status'] == 'unconfirmed')
+            {
+                $wallet->depositFloat($data['data']['amount'],[
+                    'id' => $data['data']['id'],
+                    'method' => 'web',
+                    'note' => 'Balance Received',
+                    'currency' => $data['data']['currency'],
+                    'amount' => $data['data']['amount'],
+                    'fee' => $data['data']['fee'],
+                    'source_tnx_id' => $data['data']['txid'],
+                    'payment_transaction' => $data['data']['payment_transaction'],
+                    'status' => $data['data']['payment_transaction']['status'],
+                    'transaction' => [
+                        'type' => 'received',
+                        'deposit_address' => $data['data']['wallet']['deposit_address'],
+                        'meta' => null,
+                    ]
+                ],false);
+            }
+        }
+
+        if(isset($data['event']) && $data['event'] == 'deposit.successful')
+        {
+            $user = User::where('user_key',$data['data']['user']['id'])->first();
+
+            if(!$user->hasWallet($data['data']['wallet']['currency']))
+            {
+                return response('Failed Invalid Wallet',404);
+            }
+
+            $wallet = $user->getWallet($data['data']['wallet']['currency']);
+            if($data['data']['payment_transaction']['status'] == 'confirmed')
+            {
+                $transaction = Transaction::where('meta->id',$data['data']['id'])->first();
+                $user->confirm($transaction);
+            }
         }
 
         return response('Success',200);

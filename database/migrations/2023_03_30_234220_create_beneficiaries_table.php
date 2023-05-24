@@ -15,7 +15,12 @@ return new class extends Migration
     {
         Schema::create('beneficiaries', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('wallet_id');
+            $table->string('display_name');
+            $table->longText('address');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

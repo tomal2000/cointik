@@ -25,10 +25,21 @@ class User extends Authenticatable implements Wallet, WalletFloat, Confirmable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
         'user_key',
+        'first_name',
+        'last_name',
+        'email',
+        'phone_country_code',
+        'phone',
+        'email_verified_at',
+        'phone_verified_at',
+        'password',
+        'pin',
+        'lc_country_id',
+        'kyc_status',
+        'status',
+        'wrong_attempt',
+        'meta',
     ];
 
     /**
@@ -48,10 +59,16 @@ class User extends Authenticatable implements Wallet, WalletFloat, Confirmable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
     public function deposit_account()
     {
         return $this->hasOne(DepositAccount::class,'user_id','id');
+    }
+
+    public function beneficiaries()
+    {
+        return $this->hasMany(Beneficiary::class,'user_id','id');
     }
 }
