@@ -12,8 +12,8 @@ jobs:
       with:
         fetch-depth: 2
     - name: FTP-Deploy-Action
-      uses: SamKirkland/FTP-Deploy-Action@3.1.1
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        ftp-server: ${{ secrets.FTP_SERVER_GIT }}
-        ftp-username: ${{ secrets.FTP_USERNAME_GIT }}
-        ftp-password: ${{ secrets.FTP_PASSWORD_GIT }}
+        server: ${{ secrets.FTP_SERVER_GIT }}
+        username: ${{ secrets.FTP_USERNAME_GIT }}
+        password: ${{ secrets.FTP_PASSWORD_GIT }}
