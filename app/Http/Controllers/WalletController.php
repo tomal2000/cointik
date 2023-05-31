@@ -6,6 +6,7 @@ use App\Helpers\Api;
 use App\Helpers\General;
 use App\Models\Currency;
 use App\Models\WalletType;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -20,6 +21,7 @@ class WalletController extends Controller
         //$availableWallets = Currency::all();
         $availableWallets = WalletType::crypto()->get();
         $wallets = Auth::user()->wallets->where('slug','!=','ngn');
+        //return Wallet::find(9)->walletAssign;
         return view('user.wallet.index',compact('wallets','availableWallets'));
    }
 
@@ -55,6 +57,7 @@ class WalletController extends Controller
                     'name' => $availableCrypto->display_name,
                     'slug' => $availableCrypto->code,
                     'description' => 'Crypto Currency Wallet',
+                    'decimal_places' => $availableCrypto->allow_decimal,
                     'meta' => [
                         'id' => $result->data->id,
                         'address' => null,
@@ -62,6 +65,9 @@ class WalletController extends Controller
                         'decimal_places' => $availableCrypto->allow_decimal,
                         'wallet_type' => $availableCrypto,
                     ]
+                ]);
+                $availableCrypto->user_assign()->create([
+                    'wallet_id' => $wallet->id
                 ]);
                 Alert::alert('Success!', 'Wallet Create Successfully.Please Wait A Little Bit If Address Is Not Generate', 'success');
                 return redirect()->back();

@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('get:market', function () {
+    $this->comment('Market Completed');
+})->purpose('Market Completed');
+
+Artisan::command('get:tickers', function () {
+    $this->comment('Tickers Completed');
+})->purpose('Tickers Completed');

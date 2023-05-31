@@ -174,6 +174,8 @@ button {
 
                                     <form class="row g-3 mt-5" id="transfer_form" action="{{ route('send') }}" method="POST">
                                         @csrf
+                                        <input type="hidden" id="rate" value="0">
+                                        <input type="hidden" id="vol" value="0">
                                         <div class="col-md-12">
                                             <div class="input-group mb-3">
                                                 <div class="form-floating flex-grow-1">
@@ -181,7 +183,7 @@ button {
                                                         aria-label="Wallet Id">
                                                         <option selected="" value="">--Select--</option>
                                                         @foreach ($wallets as $wallet)
-                                                        <option data-balance="{{ $wallet->balanceFloat }}" value="{{ $wallet->id }}">{{ $wallet->name }}</option>
+                                                        <option data-currency="{{ $wallet->slug }}" data-balance="{{ $wallet->balanceFloat }}" value="{{ $wallet->id }}">{{ $wallet->name }}</option>
                                                         @endforeach
                                                     </select>
                                                     <label for="wallet_id">Wallet</label>
@@ -208,17 +210,37 @@ button {
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-floating">
+                                            <div class="row">
+                                                <div class="col-5">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control amount" id="crypto_amount"
+                                                            placeholder="Amount" name="crypto_amount">
+                                                        <label for="amount" id="labelOfAmount">Amount</label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2 d-flex justify-content-center">
+                                                    <button type="button" class="btn btn-primary"><i class="bi bi-arrow-left-right"></i></button>
+                                                </div>
+                                                <div class="col-5 mx-auto">
+                                                    <div class="form-floating">
+                                                        <input type="text" class="form-control amount" id="local_amount"
+                                                            placeholder="Amount" name="local_amount" data-currency="ngn" readonly>
+                                                        <label for="amount">NGN</label>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            {{-- <div class="form-floating">
                                                 <input type="text" class="form-control amount" id="amount"
                                                     placeholder="Amount" name="amount">
                                                 <label for="amount">Amount</label>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="naration"
-                                                    placeholder="Naration" name="naration">
-                                                <label for="naration">Naration</label>
+                                                <input type="text" class="form-control" id="note"
+                                                    placeholder="Note" name="note">
+                                                <label for="naration">Note</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -273,8 +295,8 @@ button {
                 var  fee = $('#fee_area').text();
                 var  transfer_type = "External";
                 var  to = $('#address_id option:selected').text();
-                var  amount = $('#amount').val();
-                var  naration = $('#naration').val();
+                var  amount = $('#crypto_amount').val();
+                var  naration = $('#note').val();
                 //var  total = $('#total').val();
                 $('.tnx_type').text(tnx_type);
                 $('.currency').text(currency);
@@ -341,16 +363,44 @@ button {
             dataType: 'json',
             success: function(response){
                 $('#fee_area').text(response['data']['amount']);
+            }
+        });
+        }
+
+        function get_rate(market) {
+        $.ajax({
+            url: "{{ url('/withdraw/exchange/rate') }}/"+market,
+            type: 'get',
+            dataType: 'json',
+            success: function(response){
+
+                $('#rate').val(response['open']);
+                $('#vol').val(response['vol']);
                 //alert(response['data']['amount']);
             }
         });
         }
+
+$("#crypto_amount").keyup(function(){
+   var crypto_amount = $(this).val();
+   var local_amount = $('#local_amount').val();
+   var rate = $('#rate').val();
+   var vol = $('#vol').val();
+   var get_one = rate / 1;
+   var ex = get_one * crypto_amount;
+   $('#local_amount').val(ex);
+});
 
 $('#wallet_id').change(function(){
 
     //alert('go');
 
      var id = $(this).val();
+     var base = 'ngn';
+
+     $('#labelOfAmount').text($("#wallet_id option:selected" ).text());
+
+     get_rate($("#wallet_id option:selected" ).data('currency')+base);
         //get_fee(id);
      // Empty the dropdown
      $('#address_id').find('option').not(':first').remove();
@@ -371,10 +421,11 @@ $('#wallet_id').change(function(){
                   // Read data and create <option >
                   for(var i=0; i<len; i++){
 
-                       var id = response['data'][i].address;
+                       var id = response['data'][i].id;
+                       var address = response['data'][i].address;
                        var name = response['data'][i].display_name;
 
-                       var option = "<option value='"+id+"'>"+id+"-"+name+"</option>";
+                       var option = "<option value='"+id+"'>"+address+"-"+name+"</option>";
 
                        $("#address_id").append(option);
                   }

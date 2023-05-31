@@ -88,7 +88,7 @@
                                             <div class="d-flex align-items-center">
 
                                                 <div class="ps-3">
-                                                    <h6>{{ $wallet->balanceFloat}}</h6>
+                                                    <h6>{{ $wallet->balanceFloat }}</h6>
 
                                                 </div>
                                                 <button class="accordion-button collapsed" type="button"
@@ -98,14 +98,6 @@
                                                 </button>
                                             </div>
                                         </div>
-
-                                        {{-- <h2 class="accordion-header" id="headingOne">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                                                aria-expanded="false" aria-controls="collapseOne">
-                                                View Address
-                                            </button>
-                                        </h2> --}}
                                         <div id="collapseOne-{{ $wallet->id }}" class="accordion-collapse collapse"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
                                             <div class="accordion-body">

@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\BeneficiaryController;
+use App\Models\WalletType;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\TradeController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TradeController;
 use App\Http\Controllers\TransferController;
+use App\Http\Controllers\BeneficiaryController;
 use App\Http\Controllers\User\LinkageController;
-use App\Models\WalletType;
-use Bavix\Wallet\Models\Wallet;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,16 @@ use Bavix\Wallet\Models\Wallet;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('m', function () {
+    Artisan::call('migrate');
+    return "Migrated";
+});
+
+Route::get('s', function () {
+    Artisan::call('db:seed');
+    return "Seeded";
+});
 
 Route::get('/', function () {
     return view('welcome');
@@ -76,6 +87,7 @@ Route::middleware(['auth','verified','complete'])->group(function () {
     Route::post('/beneficiary', [BeneficiaryController::class, 'create'])->name('beneficiary');
     Route::get('/beneficiary/{wallet_id}', [BeneficiaryController::class, 'userWalletBeneficiaries'])->name('beneficiary.get_by_wallet_id');
     Route::get('/withdraw/fee/{currency_id}', [TransferController::class, 'get_fee_by_currency'])->name('beneficiary.get_fee_by_currency');
+    Route::get('/withdraw/exchange/rate/{market}', [TransferController::class, 'exchange_rate'])->name('transfer.exchange_rate');
 
     Route::get('/trade', [TradeController::class, 'index'])->name('trade');
 });

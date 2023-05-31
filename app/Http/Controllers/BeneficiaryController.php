@@ -39,6 +39,7 @@ class BeneficiaryController extends Controller
     {
         $user = Auth::user();
         $beneficiary['data'] = $user->beneficiaries->where('wallet_id',$wallet_id);
+        //$beneficiary['rate'] =
         return response()->json($beneficiary);
     }
 }

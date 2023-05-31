@@ -100,7 +100,7 @@
   </script>
   <script>
      $('.amount').numeric(
-                {negative: false,decimalPlaces: 7},
+                {negative: false,decimalPlaces: 8},
                 function () {
                     alert('Positive integers only');
                     this.value = '';
