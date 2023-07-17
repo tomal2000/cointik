@@ -67,32 +67,23 @@ class TransferController extends Controller
             Alert::alert('Failed!', 'Invalid Beneficiary.', 'error');
             return redirect()->back();
         }
-        // if(!$user->hasWallet($currency->code))
-        // {
-        //     return response()->json([
-        //         'status' => 'failed',
-        //         'code' => '202',
-        //         'message' => 'Invalid Wallet',
-        //         'data' => null,
-        //     ]);
-        // }
         DB::beginTransaction();
         try {
         $myWallet = $user->getWallet($wallet->slug);
-                    $myWallet->withdrawFloat($request->crypto_amount,[
-                        'channel' => 'web',
-                        'tnx_type' => 'transfer',
-                        'method' => 'external',
-                        'currency' => $wallet->slug,
-                        'status' => 'processing',
-                        'description' => 'Transfer Request Processed Successfully',
-                        'data' => [],
-                        'refund_at' => null,
-                        'refund_data' => [],
+        $myWallet->withdrawFloat($request->crypto_amount,[
+            'channel' => 'web',
+            'tnx_type' => 'transfer',
+            'method' => 'external',
+            'currency' => $wallet->slug,
+            'status' => 'processing',
+            'description' => 'Transfer Request Processed Successfully',
+            'data' => [],
+            'refund_at' => null,
+            'refund_data' => [],
 
         ],false);
 
-        $response = Http::withToken(Api::quidax_api_key())->post(Api::quidax_base_url().'users/'.$user->user_key.'/withdraws',
+        $response = Http::withToken(Api::quidax_api_key())->post(Api::quidax_base_url().'users/me/withdraws',
         [
                 'currency' => $wallet->slug,
                 'amount' => $request->amount,

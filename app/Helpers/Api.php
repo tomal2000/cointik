@@ -12,4 +12,9 @@ class Api {
     {
         return 'https://www.quidax.com/api/v1/';
     }
+
+    public static function quidax_parent_user_id()
+    {
+        return 'b52urtno';
+    }
 }

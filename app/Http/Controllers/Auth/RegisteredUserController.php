@@ -51,28 +51,6 @@ class RegisteredUserController extends Controller
             'lc_country_id' => '37',
             'password' => Hash::make($request->password),
         ]);
-        $walletType = WalletType::primary()->first();
-
-        if(!$user->hasWallet($walletType->code))
-        {
-            $wallet = $user->createWallet([
-                'name' => $walletType->display_name,
-                'slug' => $walletType->code,
-                'description' => 'This Is A System Wallet For NGN Currency',
-                'meta' => [
-                    'id' => null,
-                    'address' => null,
-                    'type' => 'local',
-                    'decimal_places' => $walletType->allow_decimal,
-                    'wallet_type' => $walletType,
-                ]
-            ]);
-
-            $walletType->user_assign()->create([
-                'wallet_id' => $wallet->id
-            ]);
-        }
-
         event(new Registered($user));
 
         Auth::login($user);

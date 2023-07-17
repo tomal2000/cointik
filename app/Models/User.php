@@ -3,21 +3,14 @@
 namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
-use Bavix\Wallet\Traits\HasWallet;
-use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Traits\CanConfirm;
-use Bavix\Wallet\Traits\HasWallets;
-use Bavix\Wallet\Traits\HasWalletFloat;
-use Bavix\Wallet\Interfaces\Confirmable;
-use Bavix\Wallet\Interfaces\WalletFloat;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements Wallet, WalletFloat, Confirmable
+class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasWallet, HasWallets, HasWalletFloat, CanConfirm;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -62,13 +55,28 @@ class User extends Authenticatable implements Wallet, WalletFloat, Confirmable
         'phone_verified_at' => 'datetime',
     ];
 
-    public function deposit_account()
+
+    public function wallets()
     {
-        return $this->hasOne(DepositAccount::class,'user_id','id');
+        return $this->hasMany(Wallet::class,'user_id','id');
     }
 
-    public function beneficiaries()
-    {
-        return $this->hasMany(Beneficiary::class,'user_id','id');
-    }
+    // public function deposit_account()
+    // {
+    //     return $this->hasOne(DepositAccount::class,'user_id','id');
+    // }
+
+    // public function beneficiaries()
+    // {
+    //     return $this->hasMany(Beneficiary::class,'user_id','id');
+    // }
+
+    // public function buySellActions()
+    // {
+    //     return $this->hasMany(BuySellAction::class,'user_id','id');
+    // }
+    // public function order()
+    // {
+    //     return $this->hasMany(Order::class,'user_id','id');
+    // }
 }

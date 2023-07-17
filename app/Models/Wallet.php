@@ -2,19 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Wallet extends \Bavix\Wallet\Models\Wallet
+class Wallet extends Model
 {
     use HasFactory;
 
-    /**
-     * Get the phone associated with the user.
-     */
-    public function walletAssign(): HasOne
+    protected $fillable = [
+        'wallet_type_id',
+        'wallet_no',
+        'user_id',
+        'address_id',
+        'address',
+        'balance',
+        'meta',
+        'status',
+    ];
+
+    public function type()
     {
-        return $this->hasOne(WalletTypeAssign::class,'wallet_id','id');
+        return $this->belongsTo(WalletType::class,'wallet_type_id','id');
     }
 }

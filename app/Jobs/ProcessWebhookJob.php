@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Order;
 use App\Models\User;
 use Bavix\Wallet\Models\Transaction;
 use Illuminate\Bus\Queueable;
@@ -45,12 +46,22 @@ class ProcessWebhookJob extends JobsProcessWebhookJob implements ShouldQueue
 
         if(isset($data['event']) && $data['event'] == 'wallet.address.generated')
         {
-           $wallet = Wallet::where('meta->id',$data['data']['id'])->first();
-           Log::debug($wallet);
+           $wallet = Wallet::where('meta->address->id',$data['data']['id'])->where('meta->address->status','pending')->first();
+           if(!$wallet)
+           {
+                Log::warning('No Wallet Found');
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'No Wallet Found'
+                ]);
+           }
            $collection = collect($wallet->meta);
            $merged = $collection->merge([
-                'id' => $collection['id'],
-                'address' => $data['data']['address']
+                'status' => 'operative',
+                'address' => [
+                    'status' => 'operative',
+                    'address' => $data['data']['address']
+                ],
              ]);
            $wallet->update(['meta' =>$merged->all()]);
         }
@@ -88,7 +99,7 @@ class ProcessWebhookJob extends JobsProcessWebhookJob implements ShouldQueue
 
         if(isset($data['event']) && $data['event'] == 'deposit.successful')
         {
-            $user = User::where('user_key',$data['data']['user']['id'])->first();
+            $user = User::where('user_key',$data['data']['user']['id'])->with('wallet')->first();
 
             if(!$user->hasWallet($data['data']['wallet']['currency']))
             {
@@ -99,9 +110,33 @@ class ProcessWebhookJob extends JobsProcessWebhookJob implements ShouldQueue
             if($data['data']['payment_transaction']['status'] == 'confirmed')
             {
                 $transaction = Transaction::where('meta->id',$data['data']['id'])->first();
-                $user->confirm($transaction);
+                Log::debug($transaction);
+                $wallet->confirm($transaction);
             }
         }
+
+        if(isset($data['event']) && $data['event'] == 'instant_order.done')
+        {
+            // $user = User::where('user_key',$data['data']['user']['id'])->with('wallet')->first();
+
+            // if(!$user->hasWallet($data['data']['wallet']['currency']))
+            // {
+            //     return response('Failed Invalid Wallet',404);
+            // }
+
+            // $wallet = $user->getWallet($data['data']['wallet']['currency']);
+            // if($data['data']['payment_transaction']['status'] == 'confirmed')
+            // {
+            //     $transaction = Transaction::where('meta->id',$data['data']['id'])->first();
+            //     Log::debug($transaction);
+            //     $wallet->confirm($transaction);
+            // }
+
+            $order  = Order::where('tracking_no',$data['data']['id'])->first();
+            Wallet::find($order->from_wallet)->withdrawFloat(json_decode($order->total)->amount);
+            Wallet::find($order->to_wallet)->depositFloat(json_decode($order->receive)->amount);
+        }
+
 
         return response('Success',200);
     }

@@ -1,4 +1,157 @@
+
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ asset('panel/home.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <div class="">
+        <div class="first-section ">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top desktop">
+                <div class="container-fluid">
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse justify-content-center navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav gap-5 text-black">
+                        <li class="nav-item lh-1">
+                          <i class="fa-sharp fa-solid fa-house fs-3 ms-3 text-secondary"></i>
+                            <a class="nav-link text-black" href="#">Home</a>
+                          </li>
+                        <li class="nav-item lh-1">
+                           <i class="fa-solid fa-envelope fs-3 ms-3 text-secondary"></i>
+                            <a class="nav-link text-black" href="#">Wallet</a>
+                          </li>
+                          <li class="nav-item lh-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <img class="w-25 ms-5" src="{{ asset('panel/images/bitcoin.png') }}" alt="">
+                            <a class="nav-link text-black" href="#">Mining Rings</a>
+                          </li>
+                          <li class="nav-item lh-1">
+                            <span class="material-symbols-outlined fs-3 ms-4 text-secondary">
+                              paid
+                              </span>
+                            <a class="nav-link text-black">Transaction</a>
+                          </li>
+                          <li class="nav-item lh-1">
+                            <span class="material-symbols-outlined fs-3 ms-3 text-secondary">
+                              menu
+                              </span>
+                            <a class="nav-link text-black">Menu</a>
+                          </li>
+                    </ul>
+                  </div>
+                </div>
+              </nav>
+
+              {{ $slot }}
+
+        <!-- Refer -->
+        <div class="refer bg-dark p-5 mt-3">
+            <div class="col-lg-4 text-white">
+                <h5>Invite friends and earn more</h5>
+                <p class="text-secondary">refer and earn $100</p>
+                <button class="btn btn-white text-danger">invite friends</button>
+            </div>
+        </div>
+
+
+
+
+        <!-- phone screen nav -->
+        <nav class="navba fixed-bottom bg-body-tertiary phone">
+            <div class="" style="margin-left: -25px;">
+              <div class="" id="navbarNav">
+                <ul class="d-flex justify-content-between gap-2" >
+                  <li class="nav-item lh-1">
+                    <i class="fa-sharp fa-solid fa-house fs-3 ms-2 text-secondary"></i>
+                      <a class="nav-link text-black" href="#">Home</a>
+                    </li>
+                  <li class="nav-item lh-1">
+                     <i class="fa-solid fa-envelope fs-3 ms-3 text-secondary"></i>
+                      <a class="nav-link text-black" href="#">Wallet</a>
+                    </li>
+                    <li class="nav-item lh-1" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      <img class="w-25 ms-4" src="{{ asset('panel/images/bitcoin.png') }}" alt="">
+                      <a class="nav-link text-black" href="#">Mining Rings</a>
+                    </li>
+                    <li class="nav-item lh-1">
+                      <span class="material-symbols-outlined fs-3 ms-4 text-secondary">
+                        paid
+                        </span>
+                      <a class="nav-link text-black">Transaction</a>
+                    </li>
+                    <li class="nav-item lh-1">
+                      <span class="material-symbols-outlined fs-3 ms-3 text-secondary">
+                        menu
+                        </span>
+                      <a class="nav-link text-black">Menu</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+
+          <!-- Button trigger modal -->
+{{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button> --}}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="2" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog fixed-bottom">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1> -->
+        <div class="text-center">
+          <h3>Miner method</h3>
+          <p class="text-secondary">Choose New Miner To Mine Your Mining Method</p>
+      </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-4">
+          <ul class="container ">
+              <li class="d-flex gap-3">
+                  <span class="material-symbols-outlined fs-3" style="color: rgb(236,159,68);">
+                      person_apron
+                      </span>
+                  <a href="" class="nav-link text-black"><b>Add Worker</b></a>
+              </li>
+              <li class="d-flex gap-3">
+                  <span class="material-symbols-outlined fs-3" style="color: rgb(236,159,68);">
+                      fingerprint
+                      </span>
+                  <a href="" class="nav-link text-black"><b>Scan QR code</b></a>
+              </li>
+              <li class="d-flex gap-3">
+                  <span class="material-symbols-outlined fs-3" style="color: rgb(236,159,68);">
+                      desktop_mac
+                      </span>
+                  <a href="" class="nav-link text-black"><b>Add computer</b></a>
+              </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/ef57372cfc.js" crossorigin="anonymous"></script>
+</body>
+</html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -82,7 +235,6 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
-
   <!-- Template Main JS File -->
   <script src="{{ asset('assets/js/main.js') }}"></script>
   <script>
@@ -112,7 +264,7 @@
 
 </body>
 
-</html>
+</html> --}}
 
 {{-- <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">

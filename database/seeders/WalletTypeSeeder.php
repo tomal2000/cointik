@@ -17,8 +17,8 @@ class WalletTypeSeeder extends Seeder
      */
     public function run()
     {
-        $data = [ ['display_name' => 'System Naira','slug' => Str::slug('System Naira'),'code' => 'ngn','logo' => 'ngn.png','is_crypto' => false],
-        ['display_name' => 'Bitcoin.','slug' => Str::slug('Bitcoin'),'code' => 'btc','logo' => 'btc.png','is_crypto' => true]];
+        $data = [
+        ['display_name' => 'Bitcoin.','slug' => Str::slug('Bitcoin'),'currency_code' => 'btc','currency_name' => 'NGN','logo' => 'btc.png','is_crypto' => true]];
         DB::table('wallet_types')->insert($data);
     }
 }

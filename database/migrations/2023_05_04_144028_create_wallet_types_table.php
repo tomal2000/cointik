@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('display_name');
             $table->string('slug')->unique();
-            $table->string('code');
+            $table->string('currency_code');
+            $table->string('currency_name');
             $table->longText('logo')->nullable();
             $table->boolean('is_crypto')->default(true);
             $table->enum('status',['active','inactive'])->default('active');
@@ -25,9 +26,9 @@ return new class extends Migration
         });
 
         Schema::table('beneficiaries', function (Blueprint $table) {
-            $table->foreign('wallet_id')
+            $table->foreign('wallet_type_id')
                 ->references('id')
-                ->on('users')
+                ->on('wallet_types')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

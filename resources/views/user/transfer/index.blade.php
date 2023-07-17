@@ -1,4 +1,15 @@
 <x-app-layout>
+    <x-slot name="header">
+        <div class="pagetitle">
+            <h1>   {{ __('Transfer') }}</h1>
+            <nav>
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">{{ __('Transfer') }}</li>
+              </ol>
+            </nav>
+          </div><!-- End Page Title -->
+    </x-slot>
     <style>
         /* CSS */
 button {
@@ -65,7 +76,7 @@ button {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Create Wallet</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -76,7 +87,7 @@ button {
                                 <div class="form-floating mb-3">
                                     <select class="form-select" id="floatingSelect" name="currency" required
                                         aria-label="Floating label select example">
-                                        <option selected="">Open this select menu</option>
+                                        <option value="">Select A Wallet Type</option>
                                         @foreach ($availableWallets as $availableWallet)
                                         <option value="{{ $availableWallet->id }}">{{ $availableWallet->display_name }}
                                         </option>
@@ -104,7 +115,7 @@ button {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Create Baneficiary</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -126,14 +137,14 @@ button {
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="floatingEmail" name="address"
-                                        placeholder="Your Email">
+                                        placeholder="Your Email" required>
                                     <label for="floatingEmail">Address</label>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-floating mb-3">
                                     <input type="text" class="form-control" id="floatingEmail" name="display_name"
-                                        placeholder="Your Email">
+                                        placeholder="Your Email" required>
                                     <label for="floatingEmail">Label</label>
                                 </div>
                             </div>
@@ -148,17 +159,6 @@ button {
             </div>
         </div>
     </div>
-    <x-slot name="header">
-        <div class="pagetitle">
-            <h1> {{ __('Dashboard') }}</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">{{ __('Dashboard') }}</li>
-                </ol>
-            </nav>
-        </div><!-- End Page Title -->
-    </x-slot>
     <section class="section dashboard">
         <div class="row">
 
@@ -170,7 +170,7 @@ button {
                     <div class="col-12">
                         <div class="card info-card revenue-card">
                             <div class="card-body">
-                                <h5 class="card-title">Your Assets
+                                <h5 class="card-title">Transfer
 
                                     <form class="row g-3 mt-5" id="transfer_form" action="{{ route('send') }}" method="POST">
                                         @csrf
@@ -243,9 +243,7 @@ button {
                                                 <label for="naration">Note</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
+                                        <div class="col-md-12 text-center">
                                             <button type="submit" class="btn btn-primary">Process</button>
                                         </div>
                                     </form>
@@ -271,10 +269,13 @@ button {
             address_id:{
                 required: true
             },
-            amount:{
+            crypto_amount:{
                 required: true
             },
-            naration:{
+            local_amount:{
+                required: true
+            },
+            note:{
                 required: true
             }
             },

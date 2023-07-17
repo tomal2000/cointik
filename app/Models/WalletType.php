@@ -24,6 +24,12 @@ class WalletType extends Model
         'status',
     ];
 
+    public function wallets()
+    {
+        return $this->hasMany(Wallet::class,'wallet_type_id','id');
+    }
+
+
     /**
      * Scope a query to only include popular users.
      */

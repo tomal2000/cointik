@@ -1,6 +1,33 @@
 <x-app-layout>
+
+           <img class="elli" src="{{ asset('panel/images/Ellipse 1.png') }}" alt="">
+
+           <img class="rec" src="{{ asset('panel/images/Rectangle 1.png') }}" alt="">
+           <x-user.wallets/>
+       </div>
+       </div>
+
+       <!-- Activities -->
+       {{-- <div class="active p-3">
+           <h5>Activities</h5>
+           <div class="currency p-4 d-flex justify-content-between mt-3">
+               <div>
+                   <b>Replenish Deposits</b>
+                   <p class="text-secondary">0.5btc</p>
+               </div>
+               <div>
+                   <h6>$40,000.31899</h6>
+                   <span class="text-secondary">$-200</span>
+                   <span class="text-success">$4.47%</span>
+               </div>
+           </div>
+       </div> --}}
+
+
+
+
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -37,11 +64,11 @@
     </div>
     <x-slot name="header">
         <div class="pagetitle">
-            <h1> {{ __('Dashboard') }}</h1>
+            <h1> {{ __('Wallets') }}</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">{{ __('Dashboard') }}</li>
+                    <li class="breadcrumb-item active">{{ __('Wallets') }}</li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
@@ -57,15 +84,12 @@
                     <div class="col-12">
                         <div class="card info-card revenue-card">
                             <div class="card-body">
-                                <h5 class="card-title">Your Assets
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
-                                        Create
-                                    </button>
+                                <h5 class="card-title">Your Wallets
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                       Create New
+                                      </button>
                                 </h5>
                                 @if ($wallets->count() > 0)
-
                                 @foreach ($wallets as $wallet)
                                 <div class="accordion my-3" id="accordionExample">
                                     <div class="accordion-item">
@@ -88,7 +112,7 @@
                                             <div class="d-flex align-items-center">
 
                                                 <div class="ps-3">
-                                                    <h6>{{ $wallet->balanceFloat }}</h6>
+                                                    <h6>{{ rtrim(rtrim(strval($wallet->balanceFloat), "0"), ".") }}</h6>
 
                                                 </div>
                                                 <button class="accordion-button collapsed" type="button"
@@ -101,17 +125,17 @@
                                         <div id="collapseOne-{{ $wallet->id }}" class="accordion-collapse collapse"
                                             aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
                                             <div class="accordion-body">
-                                                @if (isset($wallet->meta['address']) && $wallet->meta['address'] !=
+                                                @if (isset($wallet->meta['address']['address']) && $wallet->meta['address']['address'] !=
                                                 null)
                                                 <div class="text-center mt-3">
-                                                    {!! QrCode::size(300)->generate($wallet->meta['address']); !!}
+                                                    {!! QrCode::size(300)->generate($wallet->meta['address']['address']); !!}
                                                 </div>
                                                 <div class="mt-5">
                                                     <div class="input-group mb-3">
                                                         <input readonly type="text" class="form-control"
                                                             placeholder="Recipient's username"
                                                             aria-label="Recipient's username"
-                                                            value="{{ $wallet->meta['address'] }}"
+                                                            value="{{ $wallet->meta['address']['address'] }}"
                                                             aria-describedby="basic-addon2" id="copyAddress">
                                                         <button title="Copy" class="input-group-text copyClip"
                                                             id="basic-addon2" data-clipboard-target="#copyAddress"><i
@@ -154,7 +178,7 @@
 
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
 
                             </div>
 
@@ -191,5 +215,5 @@
                 e.clearSelection();
             });
     </script>
-    @endsection
+    @endsection --}}
 </x-app-layout>

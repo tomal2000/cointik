@@ -1,4 +1,86 @@
 <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- font awesome cdn link  -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- custom css file -->
+    <link rel="stylesheet" href="{{ asset('pub/welcome/style.css') }}" />
+  </head>
+  <body>
+    <!-- header section starts -->
+
+    <header class="header">
+      <a href="#" class="logo">
+        <img src="{{ asset('pub/welcome/images/Coinatik.png') }}" alt="hello" />
+      </a>
+
+      <nav class="navbar">
+        <div id="close" class="fas fa-times"></div>
+
+        <a href="#" class="nav_item active">Explore</a>
+        <a href="#" class="nav_item">Buy and sell</a>
+        <a href="#" class="nav_item">wallet</a>
+        <a href="#" class="nav_item">support</a>
+      </nav>
+
+      <a href="{{ route('login') }}" class="button-2">get started</a>
+
+      <div id="menu" class="fas fa-bars"></div>
+    </header>
+
+    <!-- header section ends -->
+
+    <!-- home section starts -->
+
+    <section class="home">
+      <div class="content">
+        <h1 class="title">
+          the universal leading peer to peer trading platform
+        </h1>
+        <p class="description">
+          Buy and sell Bitcoin, Litecoin, Bitcoin Cash, Bitcoin Gold, Ripple
+          with our array of over 500 payment methods.
+        </p>
+        <a href="{{ route('login') }}" class="btn">get started</a>
+        <div class="two-images">
+          <a href="#" class="playstore">
+            <img src="{{ asset('pub/welcome/images/pngwing.com (13).png') }}" alt="text" />
+          </a>
+          <a href="#" class="playstore appstore">
+            <img src="{{ asset('pub/welcome/images/pngegg (2).png') }}" alt="text" />
+          </a>
+        </div>
+      </div>
+
+      <div class="image">
+        <img src="{{ asset('pub/welcome/images/Vector 1.png') }}" alt="" data-speed="-3" class="move" />
+      </div>
+    </section>
+
+    <!-- home section ends -->
+    <!-- footer ends -->
+    <footer class="lower-2">
+      <h5>&copy; 2023 All rights reserved.</h5>
+    </footer>
+
+    <!-- GSAP CDN Link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
+
+    <!-- custom js file -->
+    <script src="{{ asset('pub/welcome/script.js') }}"></script>
+  </body>
+</html>
+
+
+
+{{-- <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
@@ -129,4 +211,4 @@
             </div>
         </div>
     </body>
-</html>
+</html> --}}

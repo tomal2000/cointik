@@ -11,6 +11,7 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\BeneficiaryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\User\LinkageController;
 
 /*
@@ -70,8 +71,9 @@ Route::get('/', function () {
 // ->middleware(['auth', 'verified'])
 // ->name('deposit');
 
-Route::middleware(['auth','verified','complete'])->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     Route::get('/dashboard', function () {
+       //Auth::user()->withdrawFloat(400);
         return view('dashboard');
     })->name('dashboard');
     Route::get('/deposit', function () {
@@ -89,7 +91,9 @@ Route::middleware(['auth','verified','complete'])->group(function () {
     Route::get('/withdraw/fee/{currency_id}', [TransferController::class, 'get_fee_by_currency'])->name('beneficiary.get_fee_by_currency');
     Route::get('/withdraw/exchange/rate/{market}', [TransferController::class, 'exchange_rate'])->name('transfer.exchange_rate');
 
-    Route::get('/trade', [TradeController::class, 'index'])->name('trade');
+    Route::get('/instant', [OrderController::class, 'index'])->name('trade');
+    Route::post('/instant', [OrderController::class, 'create']);
+    Route::post('/instant/confirm', [OrderController::class, 'confirm'])->name('trade.confirm');
 });
 
 Route::middleware('auth')->group(function () {

@@ -37,9 +37,9 @@ class LinkageController extends Controller
            {
                  return redirect()->away($result->url);
            }
-           return 'error1';
+           return 'ok2pay is not ready';
         }
-        return 'error2';
+        return 'ok2pay is not ready';
     }
 
         public function linkage_status(Request $request)
